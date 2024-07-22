@@ -67,7 +67,7 @@ int main(int argc, char ** argv){
     char output[102];
     intToBaseX(schoolMethod(I1, I2, base), base, output);
 
-    std::cout << output << std::endl;
+    std::cout << output;
 
 
 }
