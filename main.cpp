@@ -41,6 +41,24 @@ void schoolMethod(char I1[], char I2[], int base, char sum[102]){
 }
 
 
+
+void karatsuba(char I1[], char I2[], int base, char product[]){
+    int len1 = strlen(I1);
+    int len2 = strlen(I2);
+
+    if (len1 == 0 || len2 == 0){
+        product[0] == '0';
+        product[1] = '\0';
+    }
+
+
+}
+
+
+
+
+
+
 int main(int argc, char ** argv){
     char I1[101], I2[101];
     int base;
@@ -48,7 +66,7 @@ int main(int argc, char ** argv){
     std::cin >> I1 >> I2 >> base;
     char output[102];
     schoolMethod(I1, I2, base, output);
-    std::cout << output << std::endl;
+    std::cout << output << 0 << 0 <<std::endl;
 
 
 }
