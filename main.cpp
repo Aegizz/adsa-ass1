@@ -5,41 +5,39 @@
 
 
 
-int schoolMethod(char I1[], char I2[], int base){
+void schoolMethod(char I1[], char I2[], int base, char sum[102]){
     int len1 = strlen(I1);
     int len2 = strlen(I2);
     int max = std::max(len1, len2);
 
     int carry = 0;
-    int tempA = 0;
-    int tempB = 0;
-    int tempC = 0;
-    int sum = 0;
+    int tempA, tempB, tempC;
+    std::fill(sum, sum+102, '0');
     for (int i = 0; i < max; i++){
-        tempA = 0;
-        tempB = 0;
-        tempC = 0;
         if (i < len1){
             tempA = I1[len1 - 1 - i] - '0';
+        } else {
+            tempA = 0;
         }
         if (i < len2){
             tempB = I2[len2 - 1 - i] - '0';
+        } else {
+            tempB = 0;
         }
         tempC = tempA + tempB + carry;
-        if (tempC > base - 1){
-            tempC -= base;
-            carry = 1;
-        } else {
-            carry = 0;
-        }
-        sum += (tempC * pow(base, i));
-
+        carry = tempC/base;
+        sum[max - 1 - i] = (tempC % base) + '0';
+        
     }
     if (carry){
-        sum+= carry * pow(base, max);
+        memmove(sum + 1, sum, max);
+        sum[0] = carry + '0';
+        sum[max + 1] = '\0';
+    } else {
+        sum[max] = '\0';
     }
-    return sum;
 
+    return;
 }
 
 void intToBaseX(int num, int base, char* output) {
@@ -65,9 +63,8 @@ int main(int argc, char ** argv){
     
     std::cin >> I1 >> I2 >> base;
     char output[102];
-    intToBaseX(schoolMethod(I1, I2, base), base, output);
-
-    std::cout << output;
+    schoolMethod(I1, I2, base, output);
+    std::cout << output << std::endl;
 
 
 }
