@@ -40,22 +40,6 @@ void schoolMethod(char I1[], char I2[], int base, char sum[102]){
     return;
 }
 
-void intToBaseX(int num, int base, char* output) {
-    const char digits[] = "0123456789";
-    int i = 0;
-
-    if (num == 0) {
-        output[i++] = '0';
-    } else {
-        while (num > 0 && i < 100) {
-            output[i++] = digits[num % base];
-            num /= base;
-        }
-    }
-    output[i] = '\0';
-
-    std::reverse(output, output + i);
-}
 
 int main(int argc, char ** argv){
     char I1[101], I2[101];
