@@ -42,17 +42,17 @@ void schoolMethod(char I1[], char I2[], int base, char sum[102]){
 
 
 
-void karatsuba(char I1[], char I2[], int base, char product[]){
-    int len1 = strlen(I1);
-    int len2 = strlen(I2);
+// void karatsuba(char I1[], char I2[], int base, char product[]){
+//     int len1 = strlen(I1);
+//     int len2 = strlen(I2);
 
-    if (len1 == 0 || len2 == 0){
-        product[0] == '0';
-        product[1] = '\0';
-    }
+//     if (len1 == 0 || len2 == 0){
+//         product[0] == '0';
+//         product[1] = '\0';
+//     }
 
 
-}
+// }
 
 
 
