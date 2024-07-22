@@ -66,7 +66,7 @@ int main(int argc, char ** argv){
     std::cin >> I1 >> I2 >> base;
     char output[102];
     schoolMethod(I1, I2, base, output);
-    std::cout << output << 0 << 0 <<std::endl;
+    std::cout << output << " " << 0 << " " << 0 <<std::endl;
 
 
 }
