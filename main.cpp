@@ -26,13 +26,13 @@ int schoolMethod(char I1[], char I2[], int base){
             tempB = I2[len2 - 1 - i] - '0';
         }
         tempC = tempA + tempB + carry;
-        if (tempC > 9){
-            tempC = tempC - 10;
+        if (tempC > base - 1){
+            tempC = tempC - base;
             carry = 1;
         } else {
             carry = 0;
         }
-        sum += (tempC * pow(10, i));
+        sum += (tempC * pow(base, i));
 
     }
     if (carry){
