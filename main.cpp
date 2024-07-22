@@ -27,7 +27,7 @@ int schoolMethod(char I1[], char I2[], int base){
         }
         tempC = tempA + tempB + carry;
         if (tempC > base - 1){
-            tempC = tempC - base;
+            tempC -= base;
             carry = 1;
         } else {
             carry = 0;
@@ -36,19 +36,38 @@ int schoolMethod(char I1[], char I2[], int base){
 
     }
     if (carry){
-        sum+=1 * pow(10, max + 1);
+        sum+= carry * pow(base, max);
     }
     return sum;
 
 }
 
+void intToBaseX(int num, int base, char* output) {
+    const char digits[] = "0123456789";
+    int i = 0;
+
+    if (num == 0) {
+        output[i++] = '0';
+    } else {
+        while (num > 0 && i < 100) {
+            output[i++] = digits[num % base];
+            num /= base;
+        }
+    }
+    output[i] = '\0';
+
+    std::reverse(output, output + i);
+}
+
 int main(int argc, char ** argv){
     char I1[101], I2[101];
     int base;
-
+    
     std::cin >> I1 >> I2 >> base;
+    char output[102];
+    intToBaseX(schoolMethod(I1, I2, base), base, output);
 
-    std::cout << schoolMethod(I1, I2, base) << std::endl;
+    std::cout << output << std::endl;
 
 
 }
