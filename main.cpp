@@ -40,7 +40,6 @@ void schoolMethod(std::string I1, std::string I2, int base, std::string &sum) {
 
 
 void multiply(std::string I1, std::string I2, int base, std::string &product) {
-    // Handle zero cases
     if (I1 == "0" || I2 == "0") {
         product = "0";
         return;
@@ -48,21 +47,19 @@ void multiply(std::string I1, std::string I2, int base, std::string &product) {
     
     int len1 = I1.length();
     int len2 = I2.length();
-    std::string result(len1 + len2, 0);
+    std::vector<int> result(len1 + len2, 0);
     
-    std::reverse(I1.begin(), I1.end());
-    std::reverse(I2.begin(), I2.end());
-    
-    for (int i = 0; i < len1; i++) {
-        for (int j = 0; j < len2; j++) {
+    for (int i = len1 - 1; i >= 0; i--) {
+        for (int j = len2 - 1; j >= 0; j--) {
             int digit1 = I1[i] - '0';
             int digit2 = I2[j] - '0';
-            result[i + j] += digit1 * digit2;
+            int pos = (len1 - 1 - i) + (len2 - 1 - j);
             
-            // Handle carry
-            if (result[i + j] >= base) {
-                result[i + j + 1] += result[i + j] / base;
-                result[i + j] %= base;
+            result[pos] += digit1 * digit2;
+            
+            if (result[pos] >= base) {
+                result[pos + 1] += result[pos] / base;
+                result[pos] %= base;
             }
         }
     }
@@ -103,6 +100,12 @@ void negativeSchoolMethod(std::string I1, std::string I2, int base, std::string 
     result.resize(endIndex + 1);
     for (int i = 0; i <= endIndex; i++) {
         result[i] = temp[endIndex - i];
+    }
+}
+
+void removeLeadingZeros(std::string &str) {
+    while (str.length() > 1 && str[0] == '0') {
+        str = str.substr(1);
     }
 }
 
@@ -155,6 +158,8 @@ void karatsuba(std::string I1, std::string I2, int base, std::string &product){
     std::string temp1;
     schoolMethod(ac_shift, cross_shift, base, temp1);
     schoolMethod(temp1, bd, base, product);
+    
+    removeLeadingZeros(product);
     return;
 }
 
