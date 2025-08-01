@@ -3,6 +3,17 @@
 #include <algorithm>
 #include <cmath>
 
+
+void leadingZeros(char IX[]){
+    int pos = 0;
+    while (IX[pos] == '0' && IX[pos + 1] != '\0'){
+        pos++;
+    }
+    if (pos > 0){
+        std::strcpy(IX, IX + pos);
+    }
+}
+
 void schoolMethod(char I1[], char I2[], int base, char sum[102]){
     int len1 = strlen(I1);
     int len2 = strlen(I2);
@@ -71,15 +82,7 @@ void substitute(char I1[], char I2[], int base, char diff[]){
     std::strcpy(diff, temp);
     leadingZeros(diff);
 }
-void leadingZeros(char IX[]){
-    int pos = 0;
-    while (IX[pos] == '0' && IX[pos + 1] != '\0'){
-        pos++;
-    }
-    if (pos > 0){
-        std::strcpy(IX, IX + pos);
-    }
-}
+
 
 void karatsuba(char I1[], char I2[], int base, char product[202]){
     // if (std::strlen(I1) < 10 && std::strlen(I2) < 10){
