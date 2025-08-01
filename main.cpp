@@ -137,9 +137,114 @@ void schoolMultiplication(char I1[], char I2[], int base, char product[202]){
     product[start + 1] = '\0';
 }
 
+// Helper function to add zeros to the left of a number (multiply by base^n)
+void addZeros(char num[], int zeros, char result[]){
+    int len = strlen(num);
+    strcpy(result, num);
+    for (int i = 0; i < zeros; i++){
+        result[len + i] = '0';
+    }
+    result[len + zeros] = '\0';
+}
+
+// Helper function to add two numbers represented as strings
+void addNumbers(char num1[], char num2[], int base, char result[]){
+    schoolMethod(num1, num2, base, result);
+}
+
 void karatsuba(char I1[], char I2[], int base, char product[202]){
-    // For now, use school multiplication to avoid infinite recursion
-    schoolMultiplication(I1, I2, base, product);
+    int len1 = strlen(I1);
+    int len2 = strlen(I2);
+    
+    // Base case: if numbers are small, use school multiplication
+    if (len1 < 10 || len2 < 10){
+        schoolMultiplication(I1, I2, base, product);
+        return;
+    }
+    
+    // Make both numbers the same length by padding with leading zeros
+    int maxLen = std::max(len1, len2);
+    if (maxLen % 2 == 1) maxLen++; // Make it even
+    
+    char num1[202], num2[202];
+    
+    // Pad I1 with leading zeros
+    int padding1 = maxLen - len1;
+    for (int i = 0; i < padding1; i++){
+        num1[i] = '0';
+    }
+    strcpy(num1 + padding1, I1);
+    
+    // Pad I2 with leading zeros  
+    int padding2 = maxLen - len2;
+    for (int i = 0; i < padding2; i++){
+        num2[i] = '0';
+    }
+    strcpy(num2 + padding2, I2);
+    
+    int half = maxLen / 2;
+    
+    // Split the numbers
+    char a[102], b[102], c[102], d[102];
+    
+    // a = left half of num1, b = right half of num1
+    strncpy(a, num1, half);
+    a[half] = '\0';
+    strcpy(b, num1 + half);
+    
+    // c = left half of num2, d = right half of num2
+    strncpy(c, num2, half);
+    c[half] = '\0';
+    strcpy(d, num2 + half);
+    
+    // Remove leading zeros
+    leadingZeros(a);
+    leadingZeros(b);
+    leadingZeros(c);
+    leadingZeros(d);
+    
+    // Handle edge cases where parts become empty
+    if (strlen(a) == 0) strcpy(a, "0");
+    if (strlen(b) == 0) strcpy(b, "0");
+    if (strlen(c) == 0) strcpy(c, "0");
+    if (strlen(d) == 0) strcpy(d, "0");
+    
+    // Recursively compute the three products
+    char ac[202], bd[202], temp1[202], temp2[202], temp3[202];
+    
+    // ac = a * c
+    karatsuba(a, c, base, ac);
+    
+    // bd = b * d
+    karatsuba(b, d, base, bd);
+    
+    // (a+b) * (c+d)
+    char a_plus_b[102], c_plus_d[102];
+    addNumbers(a, b, base, a_plus_b);
+    addNumbers(c, d, base, c_plus_d);
+    karatsuba(a_plus_b, c_plus_d, base, temp3);
+    
+    // temp3 = (a+b)(c+d) - ac - bd
+    char ac_plus_bd[202];
+    addNumbers(ac, bd, base, ac_plus_bd);
+    substitute(temp3, ac_plus_bd, base, temp3);
+    
+    // Calculate final result: ac * base^(2*half) + temp3 * base^half + bd
+    char ac_shifted[400], temp3_shifted[300];
+    
+    addZeros(ac, 2 * half, ac_shifted);
+    addZeros(temp3, half, temp3_shifted);
+    
+    // Add all three terms
+    char partial[400];
+    addNumbers(ac_shifted, temp3_shifted, base, partial);
+    addNumbers(partial, bd, base, product);
+    
+    // Remove leading zeros from final result
+    leadingZeros(product);
+    if (strlen(product) == 0){
+        strcpy(product, "0");
+    }
 }
 
 
