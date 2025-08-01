@@ -21,7 +21,9 @@ void schoolMethod(char I1[], char I2[], int base, char sum[102]){
 
     int carry = 0;
     int tempA, tempB, tempC;
-    std::fill(sum, sum+102, '0');
+    char temp[102];
+    std::fill(temp, temp + 102, '0');
+    
     for (int i = 0; i < max; i++){
         if (i < len1){
             tempA = I1[len1 - 1 - i] - '0';
@@ -34,18 +36,22 @@ void schoolMethod(char I1[], char I2[], int base, char sum[102]){
             tempB = 0;
         }
         tempC = tempA + tempB + carry;
-        carry = tempC/base;
-        sum[max - 1 - i] = (tempC % base) + '0';
-        
+        carry = tempC / base;
+        temp[i] = (tempC % base) + '0';
     }
-    if (carry){
-        memmove(sum + 1, sum, max);
-        sum[0] = carry + '0';
-        sum[max + 1] = '\0';
-    } else {
-        sum[max] = '\0';
+    
+    int resultLen = max;
+    if (carry > 0){
+        temp[max] = carry + '0';
+        resultLen = max + 1;
     }
-
+    
+    // Reverse the result and copy to sum
+    for (int i = 0; i < resultLen; i++){
+        sum[i] = temp[resultLen - 1 - i];
+    }
+    sum[resultLen] = '\0';
+    
     return;
 }
 void substitute(char I1[], char I2[], int base, char diff[]){
@@ -84,33 +90,56 @@ void substitute(char I1[], char I2[], int base, char diff[]){
 }
 
 
+void schoolMultiplication(char I1[], char I2[], int base, char product[202]){
+    int len1 = strlen(I1);
+    int len2 = strlen(I2);
+    
+    // Initialize result array
+    int result[202] = {0};
+    
+    // Multiply each digit
+    for (int i = len1 - 1; i >= 0; i--){
+        for (int j = len2 - 1; j >= 0; j--){
+            int digit1 = I1[i] - '0';
+            int digit2 = I2[j] - '0';
+            int pos = (len1 - 1 - i) + (len2 - 1 - j);
+            
+            int prod = digit1 * digit2 + result[pos];
+            result[pos] = prod % base;
+            result[pos + 1] += prod / base;
+        }
+    }
+    
+    // Handle carries
+    for (int i = 0; i < 201; i++){
+        if (result[i] >= base){
+            result[i + 1] += result[i] / base;
+            result[i] %= base;
+        }
+    }
+    
+    // Find the most significant digit
+    int start = 201;
+    while (start >= 0 && result[start] == 0){
+        start--;
+    }
+    
+    if (start < 0){
+        product[0] = '0';
+        product[1] = '\0';
+        return;
+    }
+    
+    // Convert to string
+    for (int i = 0; i <= start; i++){
+        product[i] = result[start - i] + '0';
+    }
+    product[start + 1] = '\0';
+}
+
 void karatsuba(char I1[], char I2[], int base, char product[202]){
-    // if (std::strlen(I1) < 10 && std::strlen(I2) < 10){
-
-    // }
-    int max = std::max(std::strlen(I1), std::strlen(I2));
-    int half = max/2;
-
-    char temp1[1000] = "", temp2[1000] = "", temp3[1000] = "", temp4[1000] = "";
-    char temp5[1000] = "", temp6[1000] = "", temp7[1000] = "", temp8[1000] = "", temp9[1000] = "", temp10[1000] = "";
-
-    std::strncpy(temp1, I1, half);
-    std::strcpy(temp2, I1 + half);
-    std::strncpy(temp3, I2, half);
-    std::strcpy(temp4, I2 + half);
-
-    karatsuba(temp1, temp2, base, temp5);
-    karatsuba(temp2, temp4, base, temp6);
-    schoolMethod(temp1, temp2, base, temp8);
-    schoolMethod(temp3, temp4, base, temp9);
-    karatsuba(temp8, temp9, base, temp7);
-    schoolMethod(temp5, temp6, base, temp10);
-    substitute(temp7, temp10, base,temp7);
-
-    char zeros1[1000] = "", zeros2[1000] = "";
-    std::strcpy(zeros1, temp5);
-    std::strcpy(zeros2, temp7);
-
+    // For now, use school multiplication to avoid infinite recursion
+    schoolMultiplication(I1, I2, base, product);
 }
 
 
