@@ -3,8 +3,6 @@
 #include <algorithm>
 #include <cmath>
 
-
-
 void schoolMethod(char I1[], char I2[], int base, char sum[102]){
     int len1 = strlen(I1);
     int len2 = strlen(I2);
@@ -59,18 +57,19 @@ void substitute(char I1[], char I2[], int base, char diff[]){
         } else {
             tempB = 0;
         }
-        int tempC = tempA - tempB - carry;
+        tempC = tempA - tempB - carry;
         if (tempC < 0){
-            tempC += 10;
+            tempC += base;
             carry = 1;
         } else {
             carry = 0;
         }
-        temp[i] = tempC - '0';
+        temp[i] = tempC + '0';
     }
-    std::reverse(temp, temp + std::strlen(temp));
+    temp[max] = '\0';
+    std::reverse(temp, temp + max);
     std::strcpy(diff, temp);
-
+    leadingZeros(diff);
 }
 void leadingZeros(char IX[]){
     int pos = 0;
@@ -109,7 +108,6 @@ void karatsuba(char I1[], char I2[], int base, char product[202]){
     std::strcpy(zeros1, temp5);
     std::strcpy(zeros2, temp7);
 
-    for (int i = 0; i < max; i++)
 }
 
 
