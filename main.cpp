@@ -115,7 +115,7 @@ void karatsuba(std::string I1, std::string I2, int base, std::string &product){
     int len2 = I2.length();
 
     if (len1 < 2 || len2 < 2){
-        if (stoi(I1) == 0 || stoi(I2) == 0){
+        if (I1 == "0" || I2 == "0"){
             product = "0";
             return;
         }
